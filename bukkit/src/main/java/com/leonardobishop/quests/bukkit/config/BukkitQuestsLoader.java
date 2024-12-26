@@ -2,7 +2,15 @@ package com.leonardobishop.quests.bukkit.config;
 
 import com.leonardobishop.quests.bukkit.BukkitQuestsPlugin;
 import com.leonardobishop.quests.bukkit.hook.itemgetter.ItemGetter;
-import com.leonardobishop.quests.bukkit.item.*;
+import com.leonardobishop.quests.bukkit.item.ExecutableItemsQuestItem;
+import com.leonardobishop.quests.bukkit.item.ItemsAdderQuestItem;
+import com.leonardobishop.quests.bukkit.item.MMOItemsQuestItem;
+import com.leonardobishop.quests.bukkit.item.OraxenQuestItem;
+import com.leonardobishop.quests.bukkit.item.ParsedQuestItem;
+import com.leonardobishop.quests.bukkit.item.PyroFishingProQuestItem;
+import com.leonardobishop.quests.bukkit.item.QuestItem;
+import com.leonardobishop.quests.bukkit.item.QuestItemRegistry;
+import com.leonardobishop.quests.bukkit.item.SlimefunQuestItem;
 import com.leonardobishop.quests.bukkit.menu.itemstack.QItemStack;
 import com.leonardobishop.quests.bukkit.menu.itemstack.QItemStackRegistry;
 import com.leonardobishop.quests.bukkit.util.lang3.StringUtils;
@@ -268,6 +276,7 @@ public class BukkitQuestsLoader implements QuestsLoader {
                         List<String> startCommands = config.getStringList("startcommands");
                         List<String> cancelCommands = config.getStringList("cancelcommands");
                         List<String> expiryCommands = config.getStringList("expirycommands");
+                        String vaultReward = config.getString("vaultreward", null);
                         boolean repeatable = config.getBoolean("options.repeatable", false);
                         boolean cooldown = config.getBoolean("options.cooldown.enabled", false);
                         boolean timeLimit = config.getBoolean("options.time-limit.enabled", false);
@@ -302,6 +311,7 @@ public class BukkitQuestsLoader implements QuestsLoader {
                                 .withStartCommands(startCommands)
                                 .withCancelCommands(cancelCommands)
                                 .withExpiryCommands(expiryCommands)
+                                .withVaultReward(vaultReward)
                                 .withPlaceholders(placeholders)
                                 .withProgressPlaceholders(progressPlaceholders)
                                 .withCooldown(cooldownTime)
@@ -500,6 +510,10 @@ public class BukkitQuestsLoader implements QuestsLoader {
                         case "atlas":
                             if (!Bukkit.getPluginManager().isPluginEnabled("Atlas")) return FileVisitResult.CONTINUE;
                             item = new AtlasQuestItem(id, config.getString("item.id"));
+                            break;
+                        case "pyrofishingpro":
+                            if (!Bukkit.getPluginManager().isPluginEnabled("PyroFishingPro")) return FileVisitResult.CONTINUE;
+                            item = new PyroFishingProQuestItem(id, config.getInt("item.fish-number", -1), config.getString("item.tier"));
                             break;
                     }
 

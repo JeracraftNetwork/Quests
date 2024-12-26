@@ -1,3 +1,5 @@
+import net.raphimc.javadowngrader.gradle.task.DowngradeJarTask
+
 plugins {
     id 'java'
     id 'io.github.goooler.shadow' version '8.1.7'
@@ -13,16 +15,16 @@ allprojects {
     group = 'com.leonardobishop'
     version = '3.15'
 
-    sourceCompatibility = 17
-    targetCompatibility = 17
+    sourceCompatibility = 21
+    targetCompatibility = 21
 }
 
 task allJar( type: Jar, dependsOn: subprojects.tasks['build'] ) {
     if (project.findProperty('gitversion') == null || project.findProperty('gitversion') == 'true') {
         ext.gitCommitHash = 'git rev-parse --verify --short HEAD'.execute().text.trim()
-        project.version = "${project.version}-${gitCommitHash}-JERA"
+        project.version = "${project.version}-${gitCommitHash}"
         subprojects.each {
-            it.version = "${it.version}-${gitCommitHash}-JERA"
+            it.version = "${it.version}-${gitCommitHash}"
         }
     }
 
@@ -34,12 +36,12 @@ task allJar( type: Jar, dependsOn: subprojects.tasks['build'] ) {
     archiveBaseName = 'Quests'
 }
 
-//tasks.register("java8Jar", DowngradeJarTask) {
-//    input = tasks.jar.archiveFile.get().asFile
-//    outputSuffix = "+java8"
-//    compileClassPath = sourceSets.main.compileClasspath
-//}.get().dependsOn("allJar")
-//allJar.finalizedBy("java8Jar")
+tasks.register("java8Jar", DowngradeJarTask) {
+    input = tasks.jar.archiveFile.get().asFile
+    outputSuffix = "+java8"
+    compileClassPath = sourceSets.main.compileClasspath
+}.get().dependsOn("allJar")
+allJar.finalizedBy("java8Jar")
 
 artifacts {
     archives allJar
@@ -64,11 +66,10 @@ publishing {
     repositories {
         maven {
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_MAVEN_TOKEN")
+                username = project.findProperty('mavenUser') ?: System.getenv('MAVEN_USER')
+                password = project.findProperty('mavenPassword') ?: System.getenv('MAVEN_PASSWORD')
             }
-            name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/JeracraftNetwork/Quests"
+            url = "https://repo.leonardobishop.com/releases/"
         }
     }
 }
