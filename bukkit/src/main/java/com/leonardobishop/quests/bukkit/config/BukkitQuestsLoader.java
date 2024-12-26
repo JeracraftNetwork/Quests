@@ -503,9 +503,13 @@ public class BukkitQuestsLoader implements QuestsLoader {
                             if (!Bukkit.getPluginManager().isPluginEnabled("ItemsAdder")) return FileVisitResult.CONTINUE;
                             item = new ItemsAdderQuestItem(id, config.getString("item.id"));
                             break;
-                        case "oraxen":
-                            if (!Bukkit.getPluginManager().isPluginEnabled("Oraxen")) return FileVisitResult.CONTINUE;
-                            item = new OraxenQuestItem(id, config.getString("item.id"));
+//                        case "oraxen":
+//                            if (!Bukkit.getPluginManager().isPluginEnabled("Oraxen")) return FileVisitResult.CONTINUE;
+//                            item = new OraxenQuestItem(id, config.getString("item.id"));
+//                            break;
+                        case "atlas":
+                            if (!Bukkit.getPluginManager().isPluginEnabled("Atlas")) return FileVisitResult.CONTINUE;
+                            item = new AtlasQuestItem(id, config.getString("item.id"));
                             break;
                         case "pyrofishingpro":
                             if (!Bukkit.getPluginManager().isPluginEnabled("PyroFishingPro")) return FileVisitResult.CONTINUE;
